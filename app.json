@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "app-chat",
-    "slug": "app-chat",
+    "slug": "chat-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,10 +19,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.nik22517.chatapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c66e8d74-7a98-4f8e-9ccd-2c4e70d3e1d5"
+      }
+    },
+    "owner": "nik22517"
   }
 }
