@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String          @id @default(uuid())
+  email     String          @unique
+  password  String
+  name      String
+  avatar    String?
+  createdAt DateTime        @default(now())
+  active    Boolean         @default(true)
+  lastSeen  DateTime?
+  token     String?
+
+  conversationsAsUser1 Conversation[] @relation("UserAsUser1")
+  conversationsAsUser2 Conversation[] @relation("UserAsUser2")
+  messages             Message[]
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  user1Id   String
+  user2Id   String
+  user1     User      @relation("UserAsUser1", fields: [user1Id], references: [id])
+  user2     User      @relation("UserAsUser2", fields: [user2Id], references: [id])
+  messages  Message[]
+  lastMessage String?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@unique([user1Id, user2Id])
+}
+
+model Message {
+  id             String        @id @default(uuid())
+  conversationId String
+  senderId       String
+  content        String
+  files Json? 
+  createdAt      DateTime      @default(now())
+
+  conversation   Conversation  @relation(fields: [conversationId], references: [id])
+  sender         User          @relation(fields: [senderId], references: [id])
+
+  replyToId  String?
+  replyTo  Message? @relation("MessageReplies", fields: [replyToId],references: [id])
+  replies Message[] @relation("MessageReplies")
+}
+
+
+
+
+
+
